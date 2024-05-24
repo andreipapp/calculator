@@ -19,6 +19,7 @@ const screen = document.querySelector('.screen');
 const displayValue = 0;
 let lastValue = 0;
 let isOperator = 0;
+let isEqualClicked = 0;
 function operate(firstNumber, secondNumber, operator) {
 
     if (operator === '+') {
@@ -46,7 +47,8 @@ buttons.forEach(function (button) {
                 screen.appendChild(result);
             }
             isOperator = 1;
-        } else if (button.textContent === '=') {
+            isEqualClicked = 0;
+        } else if (button.textContent === '=' && isEqualClicked === 0) {
             if (firstNumber !== -1 && secondNumber !== -1) {
                 screen.textContent = '';
                 let result = operate(firstNumber, secondNumber, operator);
@@ -59,6 +61,7 @@ buttons.forEach(function (button) {
                 }
                 firstNumber = operate(firstNumber, secondNumber, operator);
                 isOperator = 0;
+                isEqualClicked = 1;
             }
         } else if (button.textContent === 'C') {
             screen.textContent = ''
@@ -66,13 +69,16 @@ buttons.forEach(function (button) {
             secondNumber = -1;
             operator = '';
         } else {
-            display.textContent = button.textContent;
-            screen.appendChild(display);
-            if (firstNumber === -1) {
-                firstNumber = parseInt(button.textContent);
-            } else {
-                secondNumber = parseInt(button.textContent);
+            if (button.textContent !== '=') {
+                display.textContent = button.textContent;
+                screen.appendChild(display);
+                if (isOperator === 0) {
+                    firstNumber = parseInt(screen.textContent);
+                } else {
+                    secondNumber = parseInt(screen.textContent);
+                }
             }
         }
+
     })
 })
